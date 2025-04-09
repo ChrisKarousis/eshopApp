@@ -3,7 +3,6 @@ package com.ckarousis.eshopapp.services;
 import com.ckarousis.eshopapp.model.User;
 import com.ckarousis.eshopapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

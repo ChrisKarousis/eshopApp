@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const registeredUser = await response.json();
                 message.innerText = `Registration successful! Welcome, ${registeredUser.firstName || registeredUser.username}.`;
                 message.style.color = "green";
+                window.location.href = "login.html";
             } else {
                 message.innerText = "Registration failed. Please try again.";
                 message.style.color = "red";

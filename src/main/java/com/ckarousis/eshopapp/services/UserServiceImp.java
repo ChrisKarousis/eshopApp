@@ -18,7 +18,16 @@ public class UserServiceImp implements UserService{
     }
     public List<User> getAllUsers(){return userRepository.findAll();}
 
-    public User register(User user){
+    public User register(User user) {
+        // Check if the email or username already exists
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already registered!");
+        }
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username already taken!");
+        }
+
+        // If no duplicates, save the user
         return userRepository.save(user);
     }
 

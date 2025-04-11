@@ -10,4 +10,5 @@ public interface UserService {
     List<User> getAllUsers();
     User register(User user);
     User authenticate(String email, String password);
+    void deleteUserById(Long id);
 }

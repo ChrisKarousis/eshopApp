@@ -47,4 +47,11 @@ public class UserServiceImp implements UserService{
             throw new RuntimeException("User not found with email: " + email);
         }
     }
+    public void deleteUserById(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new IllegalArgumentException("User with this id does not exist.");
+        }
+
+        userRepository.deleteById(id);
+    }
 }

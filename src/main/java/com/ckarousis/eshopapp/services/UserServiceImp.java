@@ -1,5 +1,6 @@
 package com.ckarousis.eshopapp.services;
 
+import com.ckarousis.eshopapp.model.LoginRequest;
 import com.ckarousis.eshopapp.model.User;
 import com.ckarousis.eshopapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,20 +32,21 @@ public class UserServiceImp implements UserService{
         return userRepository.save(user);
     }
 
-    public User authenticate(String email, String password) {
-        System.out.println("Email : " + email);
-        System.out.println("Pass : " + password);
-        Optional<User> userOptional = userRepository.findByEmail(email);
+    public User authenticate(LoginRequest loginRequest) {
+        boolean isEmail = loginRequest.getLogin().contains("@");
+        Optional<User> userOptional = isEmail
+                ? userRepository.findByEmail(loginRequest.getLogin())
+                : userRepository.findByUsername(loginRequest.getLogin());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            if (password.equals(user.getPassword())) {
+            if (loginRequest.getPassword().equals(user.getPassword())) {
                 System.out.println("Pass done");
                 return user;
             } else {
                 throw new RuntimeException("Invalid credentials");
             }
         } else {
-            throw new RuntimeException("User not found with email: " + email);
+            throw new RuntimeException("User not found with login: " + loginRequest.getLogin());
         }
     }
     public void deleteUserById(Long id) {

@@ -2,9 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("loginForm").addEventListener("submit", async function (event) {
         event.preventDefault();
 
-        const email = document.getElementById("email").value;
+        const login = document.getElementById("login").value;
         const password = document.getElementById("password").value;
         const message = document.getElementById("message");
+
+        const payload = { login, password };
 
         try {
             const response = await fetch("http://localhost:8080/eshop/users/login", {
@@ -12,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify(payload)
             });
 
             if (response.ok) {

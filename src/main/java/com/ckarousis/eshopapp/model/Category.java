@@ -22,5 +22,6 @@ public class Category {
     private String description;
 
     //@OneToMany(mappedBy="category")
+    //@JoinColumn(name = "category_id")
     //private List<Product> products;
 }

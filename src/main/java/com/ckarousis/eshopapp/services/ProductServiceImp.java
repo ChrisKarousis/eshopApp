@@ -35,6 +35,7 @@ public class ProductServiceImp implements ProductService{
             p.setDescription(product.getDescription());
             p.setPrice(product.getPrice());
             p.setStock(product.getStock());
+            p.setCategory(product.getCategory());
             return productRepository.save(p);
         } else {
             throw new RuntimeException("Product not found with ID: " + id);

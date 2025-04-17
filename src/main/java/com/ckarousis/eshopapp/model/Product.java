@@ -21,6 +21,6 @@ public class Product {
     private double price;
     private int stock;
 
-    //@ManyToOne
-    //private Category category;
+    @ManyToOne
+    private Category category;
 }

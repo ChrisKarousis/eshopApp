@@ -1,5 +1,7 @@
 package com.ckarousis.eshopapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +23,8 @@ public class Product {
     private double price;
     private int stock;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    @JsonIgnoreProperties("products")
     private Category category;
 }

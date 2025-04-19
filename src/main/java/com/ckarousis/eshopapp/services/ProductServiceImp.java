@@ -14,6 +14,8 @@ import java.util.Optional;
 public class ProductServiceImp implements ProductService{
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -24,6 +26,11 @@ public class ProductServiceImp implements ProductService{
     }
 
     public Product createProduct(Product product) {
+        Long categoryId = product.getCategory().getId();
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        product.setCategory(category);
         return productRepository.save(product);
     }
 

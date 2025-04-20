@@ -6,6 +6,7 @@ import com.ckarousis.eshopapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +28,13 @@ public class UserServiceImp implements UserService{
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("Username already taken!");
         }
+        //System.out.println("HERE");
 
         // If no duplicates, save the user
+        //List<String> roles = new ArrayList<>();
+        //roles.add("ROLE_USER");
+        //user.setRoles(roles);
+        //System.out.println("HEREeeeeeeeeeeeeeeeeee");
         return userRepository.save(user);
     }
 

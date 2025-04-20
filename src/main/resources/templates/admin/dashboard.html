@@ -1,0 +1,23 @@
+<h1 xmlns:th="http://www.w3.org/1999/xhtml">Admin Dashboard</h1>
+
+<h2>Products</h2>
+<a href="/eshop/admin/add-product">+ Add Product</a>
+<ul>
+    <th:block th:each="product : ${products}">
+        <li>
+            <b th:text="${product.name}"></b>
+            | <a th:href="@{/eshop/admin/delete-product/{id}(id=${product.id})}">Delete</a>
+        </li>
+    </th:block>
+</ul>
+
+<h2>Categories</h2>
+<a href="/eshop/admin/add-category">+ Add Category</a>
+<ul>
+    <th:block th:each="cat : ${categories}">
+        <li>
+            <b th:text="${cat.name}"></b>
+            | <a th:href="@{/eshop/admin/delete-category/{id}(id=${cat.id})}">Delete</a>
+        </li>
+    </th:block>
+</ul>

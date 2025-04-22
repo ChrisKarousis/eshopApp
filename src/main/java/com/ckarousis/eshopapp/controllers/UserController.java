@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/eshop/users")
@@ -28,6 +29,17 @@ public class UserController {
     public User getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id).orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
         return user;
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        Optional<User> userOptional = userService.getUserByUsername(username);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return ResponseEntity.ok(user);  // return the user data
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  // 404 if not found
+        }
     }
 
     @GetMapping

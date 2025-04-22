@@ -29,18 +29,42 @@ function renderItems(items) {
 }
 
 function purchaseItem(itemId) {
-    alert(`Purchased item with ID: ${itemId}`);
-    // You can replace this with a POST request like:
-    /*
+    //alert(`Purchased item with ID: ${itemId}`);
+    const userId = sessionStorage.getItem('userId');
+
+    const payload = {
+        userId: userId,
+        items:[
+            {
+                productId:itemId,
+                quantity:1
+            }
+        ]
+    }
+
     fetch(`/eshop/orders`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ productId: itemId })
+        body: JSON.stringify(payload)
     })
-    .then(res => res.json())
-    .then(data => alert("Order placed!"))
-    .catch(err => alert("Order failed"));
-    */
+        .then(res => {
+            if (!res.ok) {
+                // Handle failed request based on status code
+                throw new Error("Failed to place order, please try again.");
+            }
+            return res.json();
+        })
+        .then(data => {
+            // You can access the response data here (e.g., show an order ID)
+            alert("Order placed successfully!");
+            console.log("Order details:", data); // Log the order details if needed
+        })
+        .catch(err => {
+            // Catch any errors (network issues, invalid response, etc.)
+            alert(`Order failed: ${err.message}`);
+            console.error("Error details:", err);
+        });
+
 }

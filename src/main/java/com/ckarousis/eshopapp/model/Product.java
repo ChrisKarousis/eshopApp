@@ -22,6 +22,7 @@ public class Product {
     private String description;
     private double price;
     private int stock;
+    private String image;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")

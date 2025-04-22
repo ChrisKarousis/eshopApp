@@ -1,5 +1,6 @@
 package com.ckarousis.eshopapp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,9 @@ public class User {
     //@Transient
     //private List<String> roles;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Order> orders = new ArrayList<>();
     //@OneToMany
    // private List<Order> orders;
 

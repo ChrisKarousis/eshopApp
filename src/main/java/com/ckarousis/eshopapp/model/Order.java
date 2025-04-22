@@ -1,5 +1,6 @@
 package com.ckarousis.eshopapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,9 @@ public class Order {
     private double totalPrice;
     private String status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties("orders")
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL)

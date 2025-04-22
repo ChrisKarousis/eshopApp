@@ -13,6 +13,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class OrderItemRequest {
     private Long productId;
-    private Long orderId;
     private int quantity;
 }

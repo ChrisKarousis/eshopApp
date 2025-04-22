@@ -24,6 +24,16 @@ public class ProductServiceImp implements ProductService{
     public Optional<Product> getProduct(Long id) {
         return productRepository.findById(id);
     }
+    public Product updateImage(Long id, String imageUrl) {
+        Optional<Product> productOpt = productRepository.findById(id);
+        if (!productOpt.isPresent()) {
+            return null; // or throw an exception
+        }
+
+        Product product = productOpt.get();
+        product.setImage(imageUrl); // update the image URL
+        return productRepository.save(product);
+    }
 
     public Product createProduct(Product product) {
         Long categoryId = product.getCategory().getId();

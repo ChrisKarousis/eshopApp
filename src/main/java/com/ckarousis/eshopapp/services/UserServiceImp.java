@@ -20,6 +20,10 @@ public class UserServiceImp implements UserService{
     }
     public List<User> getAllUsers(){return userRepository.findAll();}
 
+    public Optional<User> getUserByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
+
     public User register(User user) {
         // Check if the email or username already exists
         if (userRepository.existsByEmail(user.getEmail())) {

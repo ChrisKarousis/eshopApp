@@ -1,0 +1,15 @@
+package com.ckarousis.eshopapp.services;
+
+import com.ckarousis.eshopapp.model.Order;
+import com.ckarousis.eshopapp.model.OrderRequest;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface OrderService {
+    Order createOrder(OrderRequest orderRequest);
+    List<Order> getAllOrders();
+    Optional<Order> getOrdersByUserId(Long userId);
+    Order updateOrderStatus(Long id, String status);
+    void deleteOrder(Long id);
+}

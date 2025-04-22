@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface OrderService {
     Order createOrder(OrderRequest orderRequest);
     List<Order> getAllOrders();
-    Optional<Order> getOrdersByUserId(Long userId);
+    List<Order> getOrdersByUserId(Long userId);
     Order updateOrderStatus(Long id, String status);
     void deleteOrder(Long id);
 }

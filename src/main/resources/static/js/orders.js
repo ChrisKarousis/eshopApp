@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const username = sessionStorage.getItem("username");
     fetch(`/eshop/orders/user/${username}`, {
         method: 'GET',
-        credentials: 'include', // needed for cookies/session auth
         headers: {
             'Content-Type': 'application/json'
         }

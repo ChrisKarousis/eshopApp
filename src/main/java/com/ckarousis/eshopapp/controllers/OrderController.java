@@ -29,9 +29,15 @@ public class OrderController {
     }
 
     @GetMapping("/{userId}") //gets the orders by UserId
-    public Order getOrder(@PathVariable Long userId) {
-        return orderService.getOrdersByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+    public List<Order> getOrder(@PathVariable Long userId) {
+        List<Order> orders = orderService.getOrdersByUserId(userId);
+
+        // If no orders are found, throw an exception
+        if (orders.isEmpty()) {
+            throw new RuntimeException("Orders not found");
+        }
+
+        return orders;
     }
 
     // Order post looks like this
@@ -49,11 +55,18 @@ public class OrderController {
     }
 
     @GetMapping("/user/{username}")
-    public Optional<Order> getOrdersForCurrentUser(@PathVariable String username) {
+    public List<Order> getOrdersForCurrentUser(@PathVariable String username) {
         System.out.println("Username:" + username);
         User user = userService.getUserByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return orderService.getOrdersByUserId(user.getId());
+        List<Order> orders = orderService.getOrdersByUserId(user.getId());
+
+        // If no orders are found, throw an exception
+        if (orders.isEmpty()) {
+            throw new RuntimeException("Orders not found");
+        }
+
+        return orders;
     }
 
 

@@ -54,8 +54,15 @@ public class OrderServiceImp implements OrderService{
         return orderRepository.findAll();
     }
 
-    public Optional<Order> getOrdersByUserId(Long userId){
-        return orderRepository.findByUserId(userId);
+    public List<Order> getOrdersByUserId(Long userId){
+        List<Order> orders = orderRepository.findByUserId(userId);
+
+        // If no orders are found, throw an exception
+        if (orders.isEmpty()) {
+            throw new RuntimeException("Orders not found");
+        }
+
+        return orders;
     }
 
     public Order updateOrderStatus(Long id, String status){

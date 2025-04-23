@@ -57,11 +57,6 @@ public class OrderServiceImp implements OrderService{
     public List<Order> getOrdersByUserId(Long userId){
         List<Order> orders = orderRepository.findByUserId(userId);
 
-        // If no orders are found, throw an exception
-        if (orders.isEmpty()) {
-            throw new RuntimeException("Orders not found");
-        }
-
         return orders;
     }
 
@@ -70,6 +65,18 @@ public class OrderServiceImp implements OrderService{
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         order.setStatus(status);
         return orderRepository.save(order);
+    }
+
+    public boolean completeOrder(Long id){
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        //payment issue
+        if(!order.getStatus().equalsIgnoreCase("COMPLETED")){
+            order.setStatus("COMPLETED");
+            orderRepository.save(order);
+            return true;
+        }
+        return false;
     }
 
     public void deleteOrder(Long id) {

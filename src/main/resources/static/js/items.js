@@ -19,8 +19,11 @@ function renderItems(items) {
                 <td>${item.description || "-"}</td>
                 <td>${item.price.toFixed(2)}</td>
                 <td>${item.stock}</td>
-                <td>${item.category?.name || "N/A"}</td>
-                <td><button class="purchase-btn" onclick="purchaseItem(${item.id})">Purchase</button></td>
+                <td>${item.category.name}</td>
+                <td>
+                    <input type="number" id="quantity-${item.id}" min="1" value="1" style="width: 60px; margin-right: 8px;">
+                    <button class="purchase-btn" onclick="purchaseItem(${item.id})">Purchase</button>
+                </td>
             `;
         }
 
@@ -31,13 +34,16 @@ function renderItems(items) {
 function purchaseItem(itemId) {
     //alert(`Purchased item with ID: ${itemId}`);
     const userId = sessionStorage.getItem('userId');
+    const quantityInput = document.getElementById(`quantity-${itemId}`);
+    const quantity = parseInt(quantityInput.value);
+    console.log(`Purchasing item ${itemId} with quantity ${quantity}`);
 
     const payload = {
         userId: userId,
         items:[
             {
                 productId:itemId,
-                quantity:1
+                quantity:quantity
             }
         ]
     }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +55,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 
-    @GetMapping("/user/{username}")
+    /*@GetMapping("/user/{username}")
     public List<Order> getOrdersForCurrentUser(@PathVariable String username) {
         System.out.println("Username:" + username);
         User user = userService.getUserByUsername(username)
@@ -67,6 +68,30 @@ public class OrderController {
         }
 
         return orders;
+    }*/
+
+    @GetMapping("/user/{username}")
+    public ResponseEntity<?> getOrdersByUsername(@PathVariable String username) {
+        try {
+            User user = userService.getUserByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            List<Order> orders = orderService.getOrdersByUserId(user.getId());
+            System.out.println(orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching orders");
+        }
+    }
+
+    @PutMapping("/{id}/complete")
+    public ResponseEntity<String> completeOrder(@PathVariable Long id) {
+        boolean success = orderService.completeOrder(id);
+        if (success) {
+            return ResponseEntity.ok("Order marked as completed");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found or already completed");
+        }
     }
 
 

@@ -11,5 +11,6 @@ public interface OrderService {
     List<Order> getAllOrders();
     List<Order> getOrdersByUserId(Long userId);
     Order updateOrderStatus(Long id, String status);
+    boolean completeOrder(Long id);
     void deleteOrder(Long id);
 }

@@ -35,7 +35,7 @@ public class ProductController {
         return ResponseEntity.ok(updatedProduct);
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public Product createproduct(@RequestBody Product product) {
         return productService.createProduct(product);
     }

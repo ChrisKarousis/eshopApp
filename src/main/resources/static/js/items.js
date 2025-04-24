@@ -1,4 +1,5 @@
 let allItems = [];
+let activeCategories = new Set();
 
 document.addEventListener("DOMContentLoaded", () => {
     fetch("/eshop/products")
@@ -6,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             allItems = data;           // Save full product list
             renderItems(allItems);     // Initial render
+            renderCategoryToggles();
 
             // Add live search listener
             document.getElementById("searchInput").addEventListener("input", (e) => {
@@ -18,6 +20,55 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => console.error("Error fetching items:", error));
 });
+
+function renderCategoryToggles() {
+    const toggleContainer = document.getElementById("categoryToggles");
+
+    fetch("/eshop/categories")
+        .then(res => res.json())
+        .then(categories => {
+            toggleContainer.innerHTML = "";
+
+            categories.forEach(cat => {
+                const toggleId = `toggle-${cat.name.replace(/\s+/g, '-')}`;
+                toggleContainer.innerHTML += `
+                    <span >${cat.name}</span>
+                    <label class="switch">
+                        <input type="checkbox" id="${toggleId}" onchange="toggleCategory('${cat.name}')">
+                        <span class="slider" style="margin-right: 15px;"></span>
+                    </label>
+                    
+                `;
+            });
+        })
+        .catch(err => console.error("Failed to load categories", err));
+
+    // Load the items initially
+    fetch("/eshop/products")
+        .then(res => res.json())
+        .then(items => {
+            allItems = items; // Store items globally
+            renderItems(allItems); // Render the items once fetched
+        })
+        .catch(err => console.error("Failed to load items", err));
+}
+
+// Function to handle toggling categories
+function toggleCategory(category) {
+    if (activeCategories.has(category)) {
+        activeCategories.delete(category); // Remove category from active if unchecked
+    } else {
+        activeCategories.add(category); // Add category to active if checked
+    }
+
+    // Filter items based on active categories
+    const filteredItems = activeCategories.size === 0
+        ? allItems // If no categories are active, show all items
+        : allItems.filter(item => activeCategories.has(item.category.name));
+
+    renderItems(filteredItems); // Re-render items based on filter
+}
+
 function renderItems(items) {
     const itemsBody = document.getElementById("itemsBody");
     itemsBody.innerHTML = "";

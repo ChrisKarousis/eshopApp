@@ -1,10 +1,23 @@
+let allItems = [];
+
 document.addEventListener("DOMContentLoaded", () => {
-    fetch("/eshop/products") // Adjust this if your endpoint is different
+    fetch("/eshop/products")
         .then(response => response.json())
-        .then(data => renderItems(data))
+        .then(data => {
+            allItems = data;           // Save full product list
+            renderItems(allItems);     // Initial render
+
+            // Add live search listener
+            document.getElementById("searchInput").addEventListener("input", (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredItems = allItems.filter(item =>
+                    item.name.toLowerCase().includes(searchTerm)
+                );
+                renderItems(filteredItems);
+            });
+        })
         .catch(error => console.error("Error fetching items:", error));
 });
-
 function renderItems(items) {
     const itemsBody = document.getElementById("itemsBody");
     itemsBody.innerHTML = "";

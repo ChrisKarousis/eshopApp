@@ -4,6 +4,9 @@ import com.ckarousis.eshopapp.model.LoginRequest;
 import com.ckarousis.eshopapp.model.User;
 import com.ckarousis.eshopapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImp implements UserService{
+public class UserServiceImp implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
@@ -20,11 +23,29 @@ public class UserServiceImp implements UserService{
     }
     public List<User> getAllUsers(){return userRepository.findAll();}
 
+    public Optional<User> getUserByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
     public Optional<User> getUserByUsername(String username){
         return userRepository.findByUsername(username);
     }
 
-    public User register(User user) {
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByEmail(email);
+        System.out.println("Trying login with: " + email);
+        if (user.isPresent()) {
+            User appUser = user.get();
+            return org.springframework.security.core.userdetails.User.withUsername(appUser.getEmail())
+                    .password(appUser.getPassword())
+                    .roles(appUser.getRole())
+                    .build();
+        }
+        throw new UsernameNotFoundException("User not found with email: " + email);
+    }
+
+    /*public User register(User user) {
         // Check if the email or username already exists
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email already registered!");
@@ -40,7 +61,7 @@ public class UserServiceImp implements UserService{
         //user.setRoles(roles);
         //System.out.println("HEREeeeeeeeeeeeeeeeeee");
         return userRepository.save(user);
-    }
+    }*/
 
     public User authenticate(LoginRequest loginRequest) {
         boolean isEmail = loginRequest.getLogin().contains("@");

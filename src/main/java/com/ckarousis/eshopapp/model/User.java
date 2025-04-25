@@ -27,8 +27,7 @@ public class User {
     private String email;
     private String address;
 
-    //@Transient
-    //private List<String> roles;
+    private String role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference

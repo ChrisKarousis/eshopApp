@@ -1,5 +1,9 @@
 let allItems = [];
 let activeCategories = new Set();
+let searchTerm = "";
+let minPrice = null;
+let maxPrice = null;
+let sortOption = "default";
 
 document.addEventListener("DOMContentLoaded", () => {
     fetch("/eshop/products")
@@ -9,17 +13,53 @@ document.addEventListener("DOMContentLoaded", () => {
             renderItems(allItems);     // Initial render
             renderCategoryToggles();
 
-            // Add live search listener
+            // Search listener
             document.getElementById("searchInput").addEventListener("input", (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const filteredItems = allItems.filter(item =>
-                    item.name.toLowerCase().includes(searchTerm)
-                );
-                renderItems(filteredItems);
+                searchTerm = e.target.value.toLowerCase();
+                applyFilters();
+            });
+
+            // Sort listener
+            document.getElementById("sortSelect").addEventListener("change", (e) => {
+                sortOption = e.target.value;
+                applyFilters();
             });
         })
         .catch(error => console.error("Error fetching items:", error));
 });
+
+function applyFilters() {
+    // Get price values from input
+    minPrice = parseFloat(document.getElementById("minPrice").value) || null;
+    maxPrice = parseFloat(document.getElementById("maxPrice").value) || null;
+
+    let filtered = allItems.filter(item => {
+        const matchesSearch = item.name.toLowerCase().includes(searchTerm);
+        const matchesCategory = activeCategories.size === 0 || activeCategories.has(item.category.name);
+        const matchesMinPrice = minPrice === null || item.price >= minPrice;
+        const matchesMaxPrice = maxPrice === null || item.price <= maxPrice;
+        return matchesSearch && matchesCategory && matchesMinPrice && matchesMaxPrice;
+    });
+
+    // Sort logic
+    switch (sortOption) {
+        case "name-asc":
+            filtered.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case "name-desc":
+            filtered.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+        case "price-asc":
+            filtered.sort((a, b) => a.price - b.price);
+            break;
+        case "price-desc":
+            filtered.sort((a, b) => b.price - a.price);
+            break;
+        // default: do nothing
+    }
+
+    renderItems(filtered);
+}
 
 function renderCategoryToggles() {
     const toggleContainer = document.getElementById("categoryToggles");
@@ -56,17 +96,11 @@ function renderCategoryToggles() {
 // Function to handle toggling categories
 function toggleCategory(category) {
     if (activeCategories.has(category)) {
-        activeCategories.delete(category); // Remove category from active if unchecked
+        activeCategories.delete(category);
     } else {
-        activeCategories.add(category); // Add category to active if checked
+        activeCategories.add(category);
     }
-
-    // Filter items based on active categories
-    const filteredItems = activeCategories.size === 0
-        ? allItems // If no categories are active, show all items
-        : allItems.filter(item => activeCategories.has(item.category.name));
-
-    renderItems(filteredItems); // Re-render items based on filter
+    applyFilters(); // Re-render items based on filter
 }
 
 function renderItems(items) {

@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const username = sessionStorage.getItem("username");
+    console.log("username: " + username);
     fetch(`/eshop/orders/user/${username}`, {
         method: 'GET',
         headers: {
@@ -69,8 +70,9 @@ function displayOrders(orders) {
 
         let itemsHtml = order.items.map(item => `
             <li>${item.product.name} (x${item.quantity}) - €${item.subtotal}
-            <img src="${item.product.image}" alt="${item.product.name}" style="width: 50px; height: 50px;"/></li>
-        `).join("");
+                ${item.product.image ? `<img src="${item.product.image}" alt="${item.product.name}" style="width: 50px; height: 50px;"/>` : ''}
+            </li>
+            `).join("");
 
         orderDiv.innerHTML = `
             <h3>Order #${order.id} - ${order.status}</h3>

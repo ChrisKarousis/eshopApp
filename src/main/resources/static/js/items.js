@@ -130,8 +130,8 @@ function renderItems(items) {
 }
 
 function purchaseItem(itemId) {
-    //alert(`Purchased item with ID: ${itemId}`);
     const userId = sessionStorage.getItem('userId');
+    alert(`User with ID: ${userId}`);
     const quantityInput = document.getElementById(`quantity-${itemId}`);
     const quantity = parseInt(quantityInput.value);
     console.log(`Purchasing item ${itemId} with quantity ${quantity}`);
@@ -155,6 +155,7 @@ function purchaseItem(itemId) {
     })
         .then(res => {
             if (!res.ok) {
+                console.log(res);
                 // Handle failed request based on status code
                 throw new Error("Failed to place order, please try again.");
             }

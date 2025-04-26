@@ -5,7 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(user => {
             // Store the username in sessionStorage
             const username=user.username;
+            const userId=user.id;
             sessionStorage.setItem("username", username);
+            sessionStorage.setItem("userId", userId);
             console.log("Username " + username);
 
             // Display the username in the welcome message

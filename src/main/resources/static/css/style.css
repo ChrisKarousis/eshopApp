@@ -7,6 +7,7 @@ body {
     align-items: center;
     margin: 0;
 }
+
 .items-container {
     padding: 20px;
     max-width: 1000px;
@@ -16,6 +17,13 @@ body {
     border-radius: 12px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     overflow: visible; /* Prevent hiding content */
+}
+
+.filters {
+    width: 25%; /* Adjust filter section width */
+    padding-right: 20px; /* Space between the filter and the items grid */
+    margin-right: 20px; /* Extra space on the right */
+    text-align: left; /* Align filter content to the left */
 }
 
 h2 {

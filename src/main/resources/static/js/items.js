@@ -72,13 +72,12 @@ function renderCategoryToggles() {
             categories.forEach(cat => {
                 const toggleId = `toggle-${cat.name.replace(/\s+/g, '-')}`;
                 toggleContainer.innerHTML += `
-                    <span >${cat.name}</span>
-                    <label class="switch">
-                        <input type="checkbox" id="${toggleId}" onchange="toggleCategory('${cat.name}')">
-                        <span class="slider" style="margin-right: 15px;"></span>
-                    </label>
-                    
-                `;
+                <span >${cat.name}</span>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="${toggleId}" onchange="toggleCategory('${cat.name}')">
+                    <span class="checkbox"></span>
+                </label>
+    `;
             });
         })
         .catch(err => console.error("Failed to load categories", err));

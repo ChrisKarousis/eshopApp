@@ -9,7 +9,6 @@
 <div class="items-container">
   <h2>📦 Available Items</h2>
 
-  <!-- 🔍 Search bar added here -->
   <input
           type="text"
           id="searchInput"
@@ -36,21 +35,9 @@
     </div>
   </div>
 
-  <table id="itemsTable">
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Price (€)</th>
-      <th>Stock</th>
-      <th>Category</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody id="itemsBody">
-    <!-- Filled by JS -->
-    </tbody>
-  </table>
+  <div id="itemsGrid" class="items-grid"></div>
+
+  </div>
 
   <button class="back-btn" onclick="location.href='home.html'">⬅ Back to Home Page</button>
 </div>

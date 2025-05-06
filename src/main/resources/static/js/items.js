@@ -104,30 +104,35 @@ function toggleCategory(category) {
 }
 
 function renderItems(items) {
-    const itemsBody = document.getElementById("itemsBody");
-    itemsBody.innerHTML = "";
+    const grid = document.getElementById("itemsGrid");
+    grid.innerHTML = ""; // Clear old items
 
     items.forEach(item => {
-        const row = document.createElement("tr");
+        if (item.stock > 0) {
+            const card = document.createElement("div");
+            card.className = "item-card";
 
-        if(item.stock > 0)
-        {
-            row.innerHTML = `
-                <td>${item.name}</td>
-                <td>${item.description || "-"}</td>
-                <td>${item.price.toFixed(2)}</td>
-                <td>${item.stock}</td>
-                <td>${item.category.name}</td>
-                <td>
-                    <input type="number" id="quantity-${item.id}" min="1" value="1" style="width: 60px; margin-right: 8px;">
-                    <button class="purchase-btn" onclick="purchaseItem(${item.id})">Purchase</button>
-                </td>
+            card.innerHTML = `
+            <div class="image-container">
+                <img src="${item.image}" alt="${item.name}" class="item-image">
+            </div>
+
+            
+            <div class="item-info">
+                <h4 class="item-name">${item.name}</h4>
+                <p class="item-price">€${item.price.toFixed(2)}</p>
+                <div class="purchase-section">
+                    <input type="number" id="quantity-${item.id}" min="1" value="1" class="quantity-input">
+                    <button class="purchase-btn" onclick="purchaseItem(${item.id})">🛒 Purchase</button>
+                </div>
+            </div>
             `;
-        }
 
-        itemsBody.appendChild(row);
+            grid.appendChild(card);
+        }
     });
 }
+
 
 function purchaseItem(itemId) {
     const userId = sessionStorage.getItem('userId');

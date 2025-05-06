@@ -199,6 +199,137 @@ button:hover {
     font-weight: bold;
 }
 
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 items per row */
+    gap: 20px;
+    padding: 20px;
+}
+
+.item-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.item-card:hover {
+    transform: translateY(-4px);
+}
+
+.image-container {
+    width: 100%;  /* Ensure the container takes the full width */
+    height: 200px; /* Set a fixed height for the image container */
+    display: flex;
+    justify-content: center;  /* Center the image horizontally */
+    align-items: center;  /* Center the image vertically */
+    overflow: hidden;  /* Prevent image overflow */
+}
+
+.item-image {
+    width: 100%;  /* Make the image take the full width of the container */
+    height: 100%;  /* Make the image take the full height of the container */
+    object-fit: cover;  /* Ensure the image covers the entire container without distortion */
+}
+
+.item-info {
+    width: 100%;
+}
+
+.item-name {
+    font-size: 16px;
+    margin: 8px 0 4px;
+}
+
+.item-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.purchase-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-input {
+    width: 60px;
+    height: 40px;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.purchase-btn {
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    height: 40px;
+}
+
+.purchase-section {
+    display: flex;
+    align-items: center;  /* Ensure elements are aligned vertically in the center */
+    gap: 10px;  /* Space between the input and the button */
+}
+
+.quantity-input {
+    width: 60px;  /* Set the width of the quantity input field */
+    padding: 8px;  /* Add some padding to the input for better appearance */
+    font-size: 16px;  /* Adjust font size for better consistency */
+    margin: 0;  /* Remove any default margin */
+    height: 40px;  /* Set the height to make it match the button */
+    box-sizing: border-box;  /* Ensure padding is included in the element's size */
+}
+
+.purchase-btn {
+    padding: 8px 16px;  /* Make the button larger for better interaction */
+    font-size: 16px;  /* Match the font size with the input */
+    cursor: pointer;  /* Make the cursor a pointer on hover */
+    background-color: #4CAF50;  /* Green background color */
+    color: white;  /* White text color */
+    border: none;  /* Remove default border */
+    border-radius: 5px;  /* Round the corners of the button */
+    height: 40px;  /* Set the height of the button to match the input */
+    box-sizing: border-box;  /* Ensure padding is included in the button's height */
+    display: flex;  /* Align text inside the button */
+    align-items: center;  /* Center the text vertically in the button */
+    justify-content: center;  /* Center the text horizontally in the button */
+}
+
+.purchase-btn:hover {
+    background-color: #45a049;  /* Slightly darker green on hover */
+}
+
+.item-info {
+    padding: 12px;
+}
+
+.item-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.2;
+}
+
+.item-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #111;
+}
+
+
 .filter-group button {
     background-color: #007bff;
     border: none;

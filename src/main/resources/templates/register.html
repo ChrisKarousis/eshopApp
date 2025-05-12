@@ -21,7 +21,7 @@
             </div>
 
             <form method="post" th:action="@{/register}" th:object="${registerDTO}">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
 
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>

@@ -24,29 +24,46 @@
           placeholder="Search products by name"
           style="margin-bottom: 15px; padding: 8px; width: 60%; font-size: 1rem;"
   >
-  <div id="categoryToggles" style="margin-bottom: 15px;"></div>
+
+  <div class="shop-container">
+
   <div class="filters">
-  <div class="filter-controls">
     <div class="filter-group">
-      <label for="sortSelect"><strong>Sort by:</strong></label>
-      <select id="sortSelect">
-        <option value="default">-- Select --</option>
-        <option value="price-asc">Price ↑</option>
-        <option value="price-desc">Price ↓</option>
-      </select>
+      <h1 style="display: inline; margin-right: 10px;">Filters</h1>
+      <span id="clearFiltersLink" style="cursor: pointer; color: #007bff; display: inline;">Clear</span>
+    </div>
+    <div class="filter-group">
+      <h3>Categories</h3>
+      <div id="categoryToggles" style="margin-bottom: 15px;"></div>
+    </div>
+    <div class="filter-group">
+      <div>
+        <label for="sortSelect"><strong>Sort by:</strong></label>
+      </div>
+      <div>
+        <select id="sortSelect">
+          <option value="default">-- Select --</option>
+          <option value="price-asc">Price ↑</option>
+          <option value="price-desc">Price ↓</option>
+        </select>
+      </div>
     </div>
 
     <div class="filter-group">
-      <label for="minPrice"><strong>Price range:</strong></label>
-      <input type="number" id="minPrice" placeholder="Min €">
-      <span>-</span>
-      <input type="number" id="maxPrice" placeholder="Max €">
-      <button onclick="applyFilters()">Apply</button>
+      <div>
+        <label for="minPrice"><strong>Price range:</strong></label>
+      </div>
+      <div>
+        <input type="number" id="minPrice" placeholder="Min €">
+        <span>-</span>
+        <input type="number" id="maxPrice" placeholder="Max €">
+        <button onclick="applyFilters()">Apply</button>
+      </div>
     </div>
   </div>
-    </div>
 
   <div id="itemsGrid" class="items-grid"></div>
+  </div>
 
 
 </div>

@@ -1,16 +1,14 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
     display: flex;
     height: 100vh;
     justify-content: center;
     align-items: center;
     margin: 0;
 }
-.items-container {
-    position: relative; /* Add this */
-    padding: 20px;
-    /* (rest of your existing styles...) */
+
+.shop-container {
+    display:flex;
 }
 
 .auth-buttons {
@@ -48,20 +46,19 @@ body {
 
 .items-container {
     padding: 20px;
-    max-width: 1000px;
     background-color: white;
     text-align: center;
     margin: auto;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     overflow: visible; /* Prevent hiding content */
 }
 
 .filters {
-    width: 25%; /* Adjust filter section width */
-    padding-right: 20px; /* Space between the filter and the items grid */
-    margin-right: 20px; /* Extra space on the right */
-    text-align: left; /* Align filter content to the left */
+    padding:0;
+    width: 20%;
+    text-align: left;
+    flex-shrink: 0;
+    margin-bottom: 20px;
+    display: block;
 }
 
 h2 {
@@ -135,8 +132,6 @@ label {
 }
 
 input {
-    padding: 10px;
-    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -174,32 +169,13 @@ button:hover {
     height: 0;
 }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 24px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
-}
-
 .switch input:checked + .slider {
     background-color: #4CAF50;
+}
+
+#clearFiltersLink:hover {
+    color: #0056b3;  /* Darker blue on hover */
+    text-decoration: underline;
 }
 
 .filter-controls {
@@ -211,9 +187,8 @@ button:hover {
 }
 
 .filter-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    display: block;
+    margin-bottom:70px;
 }
 
 .filter-group label {
@@ -221,13 +196,15 @@ button:hover {
 }
 
 .filter-group input[type="number"] {
-    width: 100px;
-    padding: 6px;
+    width: 60px;
+    padding: 5px;
     font-size: 1rem;
+    margin-top: 15px;
 }
 
 .filter-group select {
     padding: 5px;
+    margin-top: 15px;
 }
 
 .price-range span {

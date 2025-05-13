@@ -69,16 +69,18 @@ function renderCategoryToggles() {
         .then(categories => {
             toggleContainer.innerHTML = "";
 
-            categories.forEach(cat => {
-                const toggleId = `toggle-${cat.name.replace(/\s+/g, '-')}`;
-                toggleContainer.innerHTML += `
-                <span >${cat.name}</span>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="${toggleId}" onchange="toggleCategory('${cat.name}')">
-                    <span class="checkbox"></span>
-                </label>
-    `;
-            });
+                categories.forEach(cat => {
+                    const toggleId = `toggle-${cat.name.replace(/\s+/g, '-')}`;
+                    toggleContainer.innerHTML += `
+                    <div class="category-toggle">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="${toggleId}" onchange="toggleCategory('${cat.name}')">
+                            <span class="checkbox"></span>
+                            ${cat.name}
+                        </label>
+                    </div>
+                    `;
+                });
         })
         .catch(err => console.error("Failed to load categories", err));
 
@@ -177,3 +179,24 @@ function purchaseItem(itemId) {
         });
 
 }
+
+document.getElementById("clearFiltersLink").addEventListener("click", () => {
+    // Clear sort
+    document.getElementById("sortSelect").value = "default";
+    sortOption = "default";
+
+    // Clear price inputs
+    document.getElementById("minPrice").value = "";
+    document.getElementById("maxPrice").value = "";
+    minPrice = null;
+    maxPrice = null;
+
+    // Clear category checkboxes
+    activeCategories.clear();
+    document.querySelectorAll('#categoryToggles input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Reapply filters (shows all items again)
+    applyFilters();
+});

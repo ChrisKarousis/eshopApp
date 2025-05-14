@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submit Review</title>
+  <style>
+    .star {
+      font-size: 2rem;
+      color: gray;
+      cursor: pointer;
+    }
+    .star.filled {
+      color: gold;
+    }
+  </style>
+</head>
+<body>
+
+<div>
+  <h2>Review <span id="product-name" th:text="${product.name}"></span></h2>
+  <img id="product-image" th:src="@{/{path}(path=${product.image})}" alt="Product image" width="80" />
+
+  <h3>How do you rate this?</h3>
+  <div id="star-container">
+    <span class="star" data-value="1">&#9733;</span>
+    <span class="star" data-value="2">&#9733;</span>
+    <span class="star" data-value="3">&#9733;</span>
+    <span class="star" data-value="4">&#9733;</span>
+    <span class="star" data-value="5">&#9733;</span>
+  </div>
+
+  <h3>Write your review</h3>
+  <textarea id="comment" placeholder="What did and didn't you like?" rows="5" cols="50"></textarea><br>
+  <button onclick="submitReview()">Submit Review</button>
+</div>
+
+<script>
+  const productId = window.location.pathname.split("/").pop();
+  let rating = 0;
+
+  // Handle star clicks
+  document.querySelectorAll('.star').forEach(star => {
+    star.addEventListener('click', () => {
+      rating = parseInt(star.getAttribute('data-value'));
+      document.querySelectorAll('.star').forEach(s => s.classList.remove('filled'));
+      for (let i = 0; i < rating; i++) {
+        document.querySelectorAll('.star')[i].classList.add('filled');
+      }
+    });
+  });
+
+  function submitReview() {
+    const comment = document.getElementById("comment").value;
+    console.log(productId);
+    console.log(rating);
+    console.log(comment);
+
+    /*
+
+    fetch("/eshop/review", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        productId,
+        userId,
+        rating,
+        comment
+      })
+    })
+            .then(res => {
+              if (!res.ok) throw new Error("Failed to submit review");
+              alert("Review submitted successfully!");
+              window.location.href = "/eshop"; // or wherever you want to redirect
+            })
+            .catch(err => alert(err.message));
+  */
+  }
+
+</script>
+
+</body>
+</html>

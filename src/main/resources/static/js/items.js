@@ -71,12 +71,13 @@ function renderCategoryToggles() {
 
                 categories.forEach(cat => {
                     const toggleId = `toggle-${cat.name.replace(/\s+/g, '-')}`;
+                    const productCount = cat.products.filter(p => p.stock > 0).length;
                     toggleContainer.innerHTML += `
                     <div class="category-toggle">
                         <label class="checkbox-label">
                             <input type="checkbox" id="${toggleId}" onchange="toggleCategory('${cat.name}')">
                             <span class="checkbox"></span>
-                            ${cat.name}
+                            ${cat.name} <span class="item-count">${productCount}</span>
                         </label>
                     </div>
                     `;
@@ -112,6 +113,7 @@ function renderItems(items) {
         if (item.stock > 0) {
             const card = document.createElement("div");
             card.className = "item-card";
+            const starsHTML = renderStars(3.5);
 
             card.innerHTML = `
             <div class="image-container">
@@ -122,6 +124,9 @@ function renderItems(items) {
             <div class="item-info">
                 <h4 class="item-name">${item.name}</h4>
                 <p class="item-price">€${item.price.toFixed(2)}</p>
+                <a href="/eshop/reviews/${item.id}" class="item-rating">
+                    ${starsHTML}
+                </a>
                 <div class="purchase-section">
                     <input type="number" id="quantity-${item.id}" min="1" value="1" class="quantity-input">
                     <button class="purchase-btn" onclick="purchaseItem(${item.id})">🛒 Purchase</button>
@@ -133,6 +138,25 @@ function renderItems(items) {
         }
     });
 }
+
+function renderStars(rating) {
+    const totalStars = 5; // Number of total stars
+    let starsHTML = "";
+
+    // Loop through and generate filled, empty, or half stars
+    for (let i = 1; i <= totalStars; i++) {
+        if (i <= Math.floor(rating)) {
+            starsHTML += `<span class="star filled">★</span>`; // Filled star
+        } else if (i === Math.floor(rating) + 1 && rating % 1 !== 0) {
+            starsHTML += `<span class="star half">★</span>`; // Half star
+        } else {
+            starsHTML += `<span class="star empty">★</span>`;  // Empty star
+        }
+    }
+
+    return starsHTML;
+}
+
 
 
 function purchaseItem(itemId) {

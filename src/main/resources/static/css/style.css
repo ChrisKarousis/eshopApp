@@ -128,7 +128,6 @@ form {
 
 label {
     margin-bottom: 5px;
-    font-weight: bold;
 }
 
 input {
@@ -247,12 +246,18 @@ button:hover {
 }
 
 .image-container {
-    width: 100%;  /* Ensure the container takes the full width */
-    height: 200px; /* Set a fixed height for the image container */
+    width: 100%;
+    height: 270px; /* Set a fixed height for the image container */
     display: flex;
     justify-content: center;  /* Center the image horizontally */
     align-items: center;  /* Center the image vertically */
     overflow: hidden;  /* Prevent image overflow */
+}
+
+.item-count {
+    color: #777;
+    font-size: 0.85em;
+    margin-left: 4px;
 }
 
 .item-image {
@@ -288,6 +293,38 @@ button:hover {
     height: 40px;
     font-size: 16px;
     padding: 5px;
+}
+
+.star {
+    font-size: 1.5rem;
+    color: gray;
+    display: inline-block;
+}
+
+.star.filled {
+    color: gold; /* Filled star is gold */
+}
+
+.star.empty {
+    color: lightgray; /* Empty star is light gray */
+}
+
+.star.half {
+    background: linear-gradient(90deg, gold 50%, lightgray 50%); /* Half star effect */
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.site-header {
+    position: absolute;
+    top: 10px;
+    left: 30px;
+    z-index: 1000;
+    background-color: white;
+}
+
+.site-logo {
+    height: 120px;
 }
 
 .purchase-btn {

@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .passwordParameter("password")
                                 .defaultSuccessUrl("/items.html", false)
                         )
-                .logout(config -> config.logoutSuccessUrl("/home.html"))
+                .logout(config -> config.logoutSuccessUrl("/items.html"))
                 .build();
     }
 

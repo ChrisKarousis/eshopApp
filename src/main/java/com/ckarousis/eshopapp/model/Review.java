@@ -1,5 +1,6 @@
 package com.ckarousis.eshopapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,4 +23,9 @@ public class Review {
     private int rating;
     private String comment;
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id")
+    @JsonBackReference
+    private Product product;
 }

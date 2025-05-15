@@ -113,7 +113,6 @@ function renderItems(items) {
         if (item.stock > 0) {
             const card = document.createElement("div");
             card.className = "item-card";
-            const starsHTML = renderStars(3.5);
 
             card.innerHTML = `
             <div class="image-container">
@@ -125,7 +124,7 @@ function renderItems(items) {
                 <h4 class="item-name">${item.name}</h4>
                 <p class="item-price">€${item.price.toFixed(2)}</p>
                 <a href="/eshop/reviews/${item.id}" class="item-rating">
-                    ${starsHTML}
+                    <span class="stars-placeholder">Loading...</span>
                 </a>
                 <div class="purchase-section">
                     <input type="number" id="quantity-${item.id}" min="1" value="1" class="quantity-input">
@@ -135,28 +134,43 @@ function renderItems(items) {
             `;
 
             grid.appendChild(card);
+
+            renderStars(item.id).then(starsHTML => {
+                const ratingAnchor = card.querySelector(`.item-rating`);
+                if (ratingAnchor) {
+                    ratingAnchor.innerHTML = starsHTML;
+                }
+            }).catch(err => {
+                console.error(`Failed to load stars for product ${item.id}`, err);
+            });
         }
     });
 }
 
-function renderStars(rating) {
-    const totalStars = 5; // Number of total stars
-    let starsHTML = "";
+async function renderStars(productId) {
+    try {
+        const response = await fetch(`/eshop/reviews/average?productId=${productId}`);
+        const data = await response.json();
 
-    // Loop through and generate filled, empty, or half stars
-    for (let i = 1; i <= totalStars; i++) {
-        if (i <= Math.floor(rating)) {
-            starsHTML += `<span class="star filled">★</span>`; // Filled star
-        } else if (i === Math.floor(rating) + 1 && rating % 1 !== 0) {
-            starsHTML += `<span class="star half">★</span>`; // Half star
-        } else {
-            starsHTML += `<span class="star empty">★</span>`;  // Empty star
+        const totalStars = 5;
+        const rating = data.averageRating;
+
+        let starsHTML = "";
+        for (let i = 1; i <= totalStars; i++) {
+            if (i <= Math.floor(rating)) {
+                starsHTML += `<span class="star filled">★</span>`;
+            } else if (i === Math.floor(rating) + 1 && rating % 1 !== 0) {
+                starsHTML += `<span class="star half">★</span>`;
+            } else {
+                starsHTML += `<span class="star empty">★</span>`;
+            }
         }
+        return starsHTML;
+    } catch (error) {
+        console.error(`Error fetching stars for product ${productId}:`, error);
+        return `<span class="star empty">★★★★★</span>`; // fallback UI
     }
-
-    return starsHTML;
 }
-
 
 
 function purchaseItem(itemId) {

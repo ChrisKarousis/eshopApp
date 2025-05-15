@@ -50,28 +50,24 @@
 
   function submitReview() {
     const comment = document.getElementById("comment").value;
-    console.log(productId);
-    console.log(rating);
-    console.log(comment);
-
-    /*
+    const formData = new URLSearchParams();
+    formData.append("productId", productId);
+    formData.append("rating", rating);
+    formData.append("comment", comment);
 
     fetch("/eshop/reviews", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        productId,
-        rating,
-        comment
-      })
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: formData
     })
             .then(res => {
               if (!res.ok) throw new Error("Failed to submit review");
               alert("Review submitted successfully!");
-              window.location.href = "/eshop"; // or wherever you want to redirect
+              window.location.href = "/items.html";
             })
             .catch(err => alert(err.message));
-  */
   }
 
 </script>

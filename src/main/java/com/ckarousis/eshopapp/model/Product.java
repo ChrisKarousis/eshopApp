@@ -30,10 +30,11 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    @JsonIgnoreProperties("products")
+    @JsonBackReference
     private Category category;
 
-    /*@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Review> reviews = new ArrayList<>();*/
+    private List<Review> reviews = new ArrayList<>();
+
 }

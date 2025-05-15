@@ -35,7 +35,8 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/home.html"))
+                                .defaultSuccessUrl("/items.html", false)
+                        )
                 .logout(config -> config.logoutSuccessUrl("/home.html"))
                 .build();
     }

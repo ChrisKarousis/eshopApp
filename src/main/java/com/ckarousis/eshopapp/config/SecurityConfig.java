@@ -29,7 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/eshop/products", "/eshop/categories", "/eshop/orders")
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/eshop/reviews", "/eshop/reviews/average").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/eshop/users/*", "/eshop/reviews", "/eshop/reviews/average").permitAll()
                         .requestMatchers("/eshop/admin/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/eshop/orders").permitAll()
                         .requestMatchers(HttpMethod.POST, "/eshop/reviews").authenticated()
@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .usernameParameter("email")
                         .passwordParameter("password")
-                                .defaultSuccessUrl("/items.html", false)
+                                .defaultSuccessUrl("/items.html", true)
                         )
                 .logout(logout -> logout
                         .logoutUrl("/logout")

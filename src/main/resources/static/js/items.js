@@ -4,50 +4,69 @@ let searchTerm = "";
 let minPrice = null;
 let maxPrice = null;
 let sortOption = "default";
-let lock = 1;
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    lock = 1;
-    fetch('/eshop/users/username')
-        .then(response => response.json())
-        .then(user => {
+    initializeUser();
+    loadProductsAndCategories();
+    clearFilters();
+    logoutClear();
+    renderAdmin();
+});
+
+function initializeUser() {
+    console.log("WARN4");
+    fetch("/eshop/users/username")
+        .then(response => {
+            if (!response.ok) {
+                console.warn("Fetch failed with status:", response.status);
+                return null;
+            }
+            return response.text();
+        })
+        .then(text => {
+            if(!text){
+                console.log("Not logged in.");
+                return ;
+            }
+            const user = JSON.parse(text);
             // Store the username in sessionStorage
             const username=user.username;
             const userId=user.id;
             sessionStorage.setItem("username", username);
             sessionStorage.setItem("userId", userId);
-            lock = 0;
             console.log("Username " + username);
         })
         .catch(error => {
             console.error('Error fetching username:', error);
         });
-});
+}
 
-
-document.addEventListener("DOMContentLoaded", () => {
-    fetch("/eshop/products")
-        .then(response => response.json())
-        .then(data => {
-            allItems = data;           // Save full product list
-            renderItems(allItems);     // Initial render
-            renderCategoryToggles();
-
-            // Search listener
-            document.getElementById("searchInput").addEventListener("input", (e) => {
-                searchTerm = e.target.value.toLowerCase();
-                applyFilters();
-            });
-
-            // Sort listener
-            document.getElementById("sortSelect").addEventListener("change", (e) => {
-                sortOption = e.target.value;
-                applyFilters();
-            });
+function loadProductsAndCategories(){
+        fetch("/eshop/products")
+            .then(response => response.json())
+            .then(data => {
+                allItems = data;           // Save full product list
+                renderItems(allItems);     // Initial render
+                renderCategoryToggles();
+                filterListeners();
         })
         .catch(error => console.error("Error fetching items:", error));
-});
+}
+
+function filterListeners(){
+    // Search listener
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+        searchTerm = e.target.value.toLowerCase();
+        applyFilters();
+    });
+
+    // Sort listener
+    document.getElementById("sortSelect").addEventListener("change", (e) => {
+        sortOption = e.target.value;
+        applyFilters();
+    });
+}
 
 function applyFilters() {
     // Get price values from input
@@ -129,9 +148,11 @@ function toggleCategory(category) {
 function renderItems(items) {
     const grid = document.getElementById("itemsGrid");
     grid.innerHTML = ""; // Clear old items
+    let hasVisibleItems = false;
 
     items.forEach(item => {
         if (item.stock > 0) {
+            hasVisibleItems = true;
             const card = document.createElement("div");
             card.className = "item-card";
             const imageUrl = item.image || "/images/default.jpg";
@@ -163,6 +184,12 @@ function renderItems(items) {
 
         }
     });
+    if (!hasVisibleItems) {
+        const message = document.createElement("p");
+        message.className = "no-items-message";
+        message.textContent = "No items available.";
+        grid.appendChild(message);
+    }
 }
 
 async function renderStars(productId) {
@@ -247,43 +274,45 @@ function purchaseItem(itemId) {
 
 }
 
-document.getElementById("clearFiltersLink").addEventListener("click", () => {
-    // Clear sort
-    document.getElementById("sortSelect").value = "default";
-    sortOption = "default";
+function clearFilters(){
+    document.getElementById("clearFiltersLink").addEventListener("click", () => {
+        // Clear sort
+        document.getElementById("sortSelect").value = "default";
+        sortOption = "default";
 
-    // Clear price inputs
-    document.getElementById("minPrice").value = "";
-    document.getElementById("maxPrice").value = "";
-    minPrice = null;
-    maxPrice = null;
+        // Clear price inputs
+        document.getElementById("minPrice").value = "";
+        document.getElementById("maxPrice").value = "";
+        minPrice = null;
+        maxPrice = null;
 
-    // Clear category checkboxes
-    activeCategories.clear();
-    document.querySelectorAll('#categoryToggles input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
+        // Clear category checkboxes
+        activeCategories.clear();
+        document.querySelectorAll('#categoryToggles input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        // Reapply filters (shows all items again)
+        applyFilters();
     });
+}
 
-    // Reapply filters (shows all items again)
-    applyFilters();
-});
 
-document.addEventListener("DOMContentLoaded", function () {
-    const waitForUser = setInterval(() => {
-        if (lock === 0) {
-            clearInterval(waitForUser); // Stop checking
-
-            const username = sessionStorage.getItem('username');
+function renderAdmin() {
+    const interval = setInterval(() => {
+            const username = sessionStorage.getItem("username");
+            console.log("Username: " + username);
             if (!username) {
-                console.error("Username not available in sessionStorage.");
+                document.querySelectorAll(".admin-only-button")
+                    .forEach(btn => btn.style.display = "none")
+                clearInterval(interval);
+                console.log("Username not available in sessionStorage.");
                 return;
             }
+            clearInterval(interval);
 
             fetch(`/eshop/users/username/${username}`)
-                .then(res => {
-                    if (!res.ok) throw new Error("User not found");
-                    return res.json();
-                })
+                .then(res =>  res.json())
                 .then(user => {
                     console.log("User role:", user.role);
                     if (user.role !== "ADMIN") {
@@ -292,25 +321,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 })
                 .catch(err => console.error(err));
-        }
     }, 100); // Poll every 100ms
-});
+}
 
+function logoutClear(){
+    document.getElementById("login-link").addEventListener("click", () => sessionStorage.clear());
+    document.getElementById("register-link").addEventListener("click", () => sessionStorage.clear());
+    document.getElementById("logout-link").addEventListener("click", () => sessionStorage.clear());
 
-document.addEventListener("DOMContentLoaded", function () {
-    const loginLink = document.getElementById("login-link");
-
-    loginLink.addEventListener("click", function () {
-        sessionStorage.clear();
-    });
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const registerLink = document.getElementById("register-link");
-
-    registerLink.addEventListener("click", function () {
-        sessionStorage.clear();
-    });
-});
+}
 

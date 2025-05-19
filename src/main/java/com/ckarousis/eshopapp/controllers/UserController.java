@@ -39,8 +39,13 @@ public class UserController {
 
     @GetMapping("/username")
     public ResponseEntity<User> getUsername() {
+        System.out.println("WARN1");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+        System.out.println("WARN2");
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getName())) {
+            return ResponseEntity.ok().build();  // 200 with empty body
+        }
+        System.out.println("WARN3");
         String email = authentication.getName();
 
         Optional<User> userOptional = userService.getUserByEmail(email);
@@ -50,7 +55,7 @@ public class UserController {
             System.out.println("Username :" + user.getUsername());
             return ResponseEntity.ok(user);  // return the user data
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  // 404 if not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
     @GetMapping("/username/{username}")

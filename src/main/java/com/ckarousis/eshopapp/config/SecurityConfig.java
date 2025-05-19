@@ -27,9 +27,13 @@ public class SecurityConfig {
                         .requestMatchers("/home.html").permitAll()
                         .requestMatchers("/orders.html").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/eshop/products", "/eshop/categories", "/eshop/orders").permitAll()
+                        .requestMatchers("/eshop/products", "/eshop/categories", "/eshop/orders")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/eshop/reviews", "/eshop/reviews/average").permitAll()
                         .requestMatchers("/eshop/admin/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/eshop/orders").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/eshop/reviews").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/eshop/reviews/*").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -37,7 +41,12 @@ public class SecurityConfig {
                         .passwordParameter("password")
                                 .defaultSuccessUrl("/items.html", false)
                         )
-                .logout(config -> config.logoutSuccessUrl("/items.html"))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/items.html")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                )
                 .build();
     }
 

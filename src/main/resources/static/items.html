@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>Items</title>
@@ -15,9 +15,12 @@
 
 
   <div class="auth-buttons">
+    <a href="/eshop/admin/dashboard">
+      <button class="admin-only-button">Admins Dashboard</button>
+    </a>
     <a href="/orders.html" class="orders-icon" title="See your orders">🛒</a>
-    <a href="/login"><button>Login</button></a>
-    <button onclick="location.href='register'">Register</button>
+    <a href="/login" id="login-link"><button>Login</button></a>
+    <button onclick="location.href='register'" id="register-link">Register</button>
   </div>
 
 
@@ -69,7 +72,13 @@
   </div>
 
 
+
 </div>
+
+
+<form action="/logout" method="post">
+  <button type="submit">Disconnect</button>
+</form>
 
 <script src="js/items.js"></script>
 </body>

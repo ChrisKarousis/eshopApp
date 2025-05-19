@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ReviewService {
     void saveReview(Review review);
-
     List<Review> getAllReviews();
     Double getAverageRatingByProductId(Long productId);
+    Integer getReviewCountByProductId(Long productId);
 }

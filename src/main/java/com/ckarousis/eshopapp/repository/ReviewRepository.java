@@ -10,5 +10,8 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT AVG(r.rating) FROM Review r WHERE r.product.id = :productId")
     Double findAverageRatingByProductId(Long productId);
+
+    @Query("SELECT COUNT(r) FROM Review r WHERE r.product.id = :productId")
+    Integer findCountReviewsByProductId(Long productId);
 }
 

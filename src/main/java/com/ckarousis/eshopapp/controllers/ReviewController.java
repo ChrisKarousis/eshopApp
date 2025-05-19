@@ -29,13 +29,14 @@ public class ReviewController {
     private ProductService productService;
 
     @GetMapping
+    @ResponseBody
     public List<Review> getAllReviews() {
         return reviewService.getAllReviews();
     }
 
-        @PostMapping
-        @ResponseBody
-        public ResponseEntity<?> submitReview(
+    @PostMapping
+    @ResponseBody
+    public ResponseEntity<?> submitReview(
                 @RequestParam Long productId,
                 @RequestParam int rating,
                 @RequestParam String comment) {
@@ -52,7 +53,7 @@ public class ReviewController {
             reviewService.saveReview(review);
 
             return ResponseEntity.ok().build();
-        }
+    }
 
 
 
@@ -71,10 +72,12 @@ public class ReviewController {
     public Map<String, Object> getAverageRating(@RequestParam Long productId) {
         System.out.println("Fetching average for productId: " + productId);
         Double average = reviewService.getAverageRatingByProductId(productId);
+        Integer reviewsCount = reviewService.getReviewCountByProductId(productId);
         double avgRating = average != null ? average : 0.0;
 
         Map<String, Object> response = new HashMap<>();
         response.put("averageRating", avgRating);
+        response.put("reviewsCount", reviewsCount);
         System.out.println(response);
         return response;
     }

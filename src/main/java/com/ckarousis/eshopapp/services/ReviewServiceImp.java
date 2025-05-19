@@ -24,4 +24,8 @@ public class ReviewServiceImp implements ReviewService{
     public Double getAverageRatingByProductId(Long productId){
         return reviewRepository.findAverageRatingByProductId(productId);
     }
+
+    public Integer getReviewCountByProductId(Long productId){
+        return reviewRepository.findCountReviewsByProductId(productId);
+    }
 }

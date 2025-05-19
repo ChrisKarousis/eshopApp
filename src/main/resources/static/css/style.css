@@ -121,6 +121,18 @@ h2 {
     text-align: center;
 }
 
+.review-count-placeholder {
+    font-size: 0.9em;
+    color: #555;
+    margin-left: 4px;
+    position: relative;
+    top: -2px;
+}
+
+.item-rating {
+    text-decoration: none;
+}
+
 form {
     display: flex;
     flex-direction: column;

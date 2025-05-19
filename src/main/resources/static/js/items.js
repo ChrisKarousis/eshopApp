@@ -4,6 +4,27 @@ let searchTerm = "";
 let minPrice = null;
 let maxPrice = null;
 let sortOption = "default";
+let lock = 1;
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    lock = 1;
+    fetch('/eshop/users/username')
+        .then(response => response.json())
+        .then(user => {
+            // Store the username in sessionStorage
+            const username=user.username;
+            const userId=user.id;
+            sessionStorage.setItem("username", username);
+            sessionStorage.setItem("userId", userId);
+            lock = 0;
+            console.log("Username " + username);
+        })
+        .catch(error => {
+            console.error('Error fetching username:', error);
+        });
+});
+
 
 document.addEventListener("DOMContentLoaded", () => {
     fetch("/eshop/products")
@@ -113,19 +134,22 @@ function renderItems(items) {
         if (item.stock > 0) {
             const card = document.createElement("div");
             card.className = "item-card";
-
+            const imageUrl = item.image || "/images/default.jpg";
             card.innerHTML = `
             <div class="image-container">
-                <img src="${item.image}" alt="${item.name}" class="item-image">
+                <img src="${imageUrl}" alt="${item.name}" class="item-image">
             </div>
 
             
             <div class="item-info">
                 <h4 class="item-name">${item.name}</h4>
                 <p class="item-price">€${item.price.toFixed(2)}</p>
-                <a href="/eshop/reviews/${item.id}" class="item-rating">
-                    <span class="stars-placeholder">Loading...</span>
-                </a>
+                <div class="rating-container">
+                    <a href="/eshop/reviews/${item.id}" class="item-rating">
+                        <span class="stars-placeholder"></span>
+                    </a>
+                    <span class="review-count-placeholder">(0)</span>
+                </div>
                 <div class="purchase-section">
                     <input type="number" id="quantity-${item.id}" min="1" value="1" class="quantity-input">
                     <button class="purchase-btn" onclick="purchaseItem(${item.id})">🛒 Purchase</button>
@@ -135,14 +159,8 @@ function renderItems(items) {
 
             grid.appendChild(card);
 
-            renderStars(item.id).then(starsHTML => {
-                const ratingAnchor = card.querySelector(`.item-rating`);
-                if (ratingAnchor) {
-                    ratingAnchor.innerHTML = starsHTML;
-                }
-            }).catch(err => {
-                console.error(`Failed to load stars for product ${item.id}`, err);
-            });
+            renderStars(item.id);
+
         }
     });
 }
@@ -154,6 +172,7 @@ async function renderStars(productId) {
 
         const totalStars = 5;
         const rating = data.averageRating;
+        const reviewsCount = data.reviewsCount || 0;
 
         let starsHTML = "";
         for (let i = 1; i <= totalStars; i++) {
@@ -165,10 +184,20 @@ async function renderStars(productId) {
                 starsHTML += `<span class="star empty">★</span>`;
             }
         }
-        return starsHTML;
+
+        const starsPlaceholder = document.querySelector(`a.item-rating[href="/eshop/reviews/${productId}"] .stars-placeholder`);
+        if (starsPlaceholder) {
+            starsPlaceholder.innerHTML = starsHTML;
+
+            const ratingContainer = starsPlaceholder.closest('.rating-container');
+            const countPlaceholder = ratingContainer.querySelector('.review-count-placeholder');
+            if (countPlaceholder) {
+                countPlaceholder.textContent = `(${reviewsCount})`;
+            }
+        }
     } catch (error) {
         console.error(`Error fetching stars for product ${productId}:`, error);
-        return `<span class="star empty">★★★★★</span>`; // fallback UI
+        return `<span class="star empty">★★★★★</span>`;
     }
 }
 
@@ -238,3 +267,50 @@ document.getElementById("clearFiltersLink").addEventListener("click", () => {
     // Reapply filters (shows all items again)
     applyFilters();
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const waitForUser = setInterval(() => {
+        if (lock === 0) {
+            clearInterval(waitForUser); // Stop checking
+
+            const username = sessionStorage.getItem('username');
+            if (!username) {
+                console.error("Username not available in sessionStorage.");
+                return;
+            }
+
+            fetch(`/eshop/users/username/${username}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("User not found");
+                    return res.json();
+                })
+                .then(user => {
+                    console.log("User role:", user.role);
+                    if (user.role !== "ADMIN") {
+                        document.querySelectorAll(".admin-only-button")
+                            .forEach(btn => btn.style.display = "none");
+                    }
+                })
+                .catch(err => console.error(err));
+        }
+    }, 100); // Poll every 100ms
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const loginLink = document.getElementById("login-link");
+
+    loginLink.addEventListener("click", function () {
+        sessionStorage.clear();
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const registerLink = document.getElementById("register-link");
+
+    registerLink.addEventListener("click", function () {
+        sessionStorage.clear();
+    });
+});
+

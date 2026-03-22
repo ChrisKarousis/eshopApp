@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +18,9 @@ import java.util.Optional;
 public class UserServiceImp implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Optional<User> getUserById(Long id){
         return userRepository.findById(id);
@@ -70,7 +74,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
                 : userRepository.findByUsername(loginRequest.getLogin());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            if (loginRequest.getPassword().equals(user.getPassword())) {
+            if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
                 System.out.println("Pass done");
                 return user;
             } else {

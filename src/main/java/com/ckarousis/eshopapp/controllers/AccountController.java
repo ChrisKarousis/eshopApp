@@ -5,7 +5,7 @@ import com.ckarousis.eshopapp.model.User;
 import com.ckarousis.eshopapp.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +20,9 @@ import java.util.Optional;
 public class AccountController {
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/register")
     public String register(Model model){
@@ -56,12 +59,11 @@ public class AccountController {
         }
 
         try{
-            var bCryptEncoder = new BCryptPasswordEncoder();
             User newUser = new User();
             newUser.setUsername(registerDTO.getUsername());
             newUser.setEmail(registerDTO.getEmail());
             newUser.setRole("client");
-            newUser.setPassword(bCryptEncoder.encode(registerDTO.getPassword()));
+            newUser.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
             newUser.setAddress(registerDTO.getAddress());
             userRepository.save(newUser);
 
